@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+<style>
+body    {background-color: powderblue;}
+h1      {color: red;}
+p       {color: darkgreen;}
+.content {max-width: 300px; margin: auto;}
+</style>
+<meta charset="utf-8">
+<title>Discounts</title>
+<script>
+
+function func() {
+    //Input subtotal
+    //Output discount and tax
+    //Using math
+    var dayOfWeek = new Date().getDay();
+    let sub = parseFloat(document.getElementById("subtotal").value);
+    let dis = parseFloat(document.getElementById("discount").value);
+    let tax = parseFloat(document.getElementById("tax").value);
+    var total;
+    if ((sub >= 50) && (dayOfWeek == 2 || dayOfWeek == 3)) {
+        sub = sub * (1-dis) 
+        total = sub + (sub * tax)
+    } else {
+        sub = sub * (1-dis) 
+        total = sub + (sub * tax)
+    }
+    document.getElementById("output").innerHTML = total.toFixed(2);
+}
+</script>
+</head>
+
+<body>
+    <div class="content">
+        <h1>Enter Your subtotal</h1>
+        Subtotal: <input type="text" id="subtotal">
+        Discount: <input type="text" id="discount"> <br>
+        Tax: <input type="text" id="tax"> <br>
+        <button onclick="func()">Compute</button>
+        <div id="output"></div>
+    </div>
+</body>
+</html>
