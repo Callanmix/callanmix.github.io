@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head>
+    <title>Python App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    
+    <body>
+        {% from "_formhelpers.html" import render_field %}
+        <div>What's your name?</div>
+        <form method="POST" action="/hello">
+            <dl>
+                {{ render_field(form.sayhello) }}
+            </dl>
+            <input type=submit value="Say Hello" name="submit_btn" class="btn btn-success btn-lg">
+        </form>
+    </body>
+</html>
