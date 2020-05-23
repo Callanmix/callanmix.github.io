@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Callan Mix's Portfolio</title>
+        <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+        <style>
+            body{
+                background-color: #f7f7f7;
+                margin-top:20px;
+            }
+
+            .main-timeline {
+                position: relative
+            }
+
+            .main-timeline:before {
+                content: "";
+                display: block;
+                width: 2px;
+                height: 100%;
+                background: #c6c6c6;
+                margin: 0 auto;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0
+            }
+
+            .main-timeline .timeline {
+                margin-bottom: 40px;
+                position: relative
+            }
+
+            .main-timeline .timeline:after {
+                content: "";
+                display: block;
+                clear: both
+            }
+
+            .main-timeline .icon {
+                width: 18px;
+                height: 18px;
+                line-height: 18px;
+                margin: auto;
+                position: absolute;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0
+            }
+
+            .main-timeline .icon:before,
+            .main-timeline .icon:after {
+                content: "";
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                position: absolute;
+                top: 0;
+                left: 0;
+                transition: all 0.33s ease-out 0s
+            }
+
+            .main-timeline .icon:before {
+                background: #fff;
+                border: 2px solid #232323;
+                left: -3px
+            }
+
+            .main-timeline .icon:after {
+                border: 2px solid #c6c6c6;
+                left: 3px
+            }
+
+            .main-timeline .timeline:hover .icon:before {
+                left: 3px
+            }
+
+            .main-timeline .timeline:hover .icon:after {
+                left: -3px
+            }
+
+            .main-timeline .date-content {
+                width: 50%;
+                float: left;
+                margin-top: 22px;
+                position: relative
+            }
+
+            .main-timeline .date-content:before {
+                content: "";
+                width: 36.5%;
+                height: 2px;
+                background: #c6c6c6;
+                margin: auto 0;
+                position: absolute;
+                top: 0;
+                right: 10px;
+                bottom: 0
+            }
+
+            .main-timeline .date-outer {
+                width: 125px;
+                height: 125px;
+                font-size: 16px;
+                text-align: center;
+                margin: auto;
+                z-index: 1
+            }
+
+            .main-timeline .date-outer:before,
+            .main-timeline .date-outer:after {
+                content: "";
+                width: 125px;
+                height: 125px;
+                margin: 0 auto;
+                border-radius: 50%;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                transition: all 0.33s ease-out 0s
+            }
+
+            .main-timeline .date-outer:before {
+                background: #fff;
+                border: 2px solid #232323;
+                left: -6px
+            }
+
+            .main-timeline .date-outer:after {
+                border: 2px solid #c6c6c6;
+                left: 6px
+            }
+
+            .main-timeline .timeline:hover .date-outer:before {
+                left: 6px
+            }
+
+            .main-timeline .timeline:hover .date-outer:after {
+                left: -6px
+            }
+
+            .main-timeline .date {
+                width: 100%;
+                margin: auto;
+                position: absolute;
+                top: 37%;
+                left: 0
+            }
+
+            .main-timeline .month {
+                font-size: 18px;
+                font-weight: 700
+            }
+
+            .main-timeline .year {
+                display: block;
+                font-size: 30px;
+                font-weight: 700;
+                color: #232323;
+                line-height: 36px
+            }
+
+            .main-timeline .timeline-content {
+                width: 50%;
+                padding: 20px 0 20px 50px;
+                float: right
+            }
+
+            .main-timeline .title {
+                font-size: 19px;
+                font-weight: 700;
+                line-height: 24px;
+                margin: 0 0 15px 0
+            }
+
+            .main-timeline .description {
+                margin-bottom: 0
+            }
+
+            .main-timeline .timeline:nth-child(2n) .date-content {
+                float: right
+            }
+
+            .main-timeline .timeline:nth-child(2n) .date-content:before {
+                left: 10px
+            }
+
+            .main-timeline .timeline:nth-child(2n) .timeline-content {
+                padding: 20px 50px 20px 0;
+                text-align: right
+            }
+
+            @media only screen and (max-width: 991px) {
+                .main-timeline .date-content {
+                    margin-top: 35px
+                }
+                .main-timeline .date-content:before {
+                    width: 22.5%
+                }
+                .main-timeline .timeline-content {
+                    padding: 10px 0 10px 30px
+                }
+                .main-timeline .title {
+                    font-size: 17px
+                }
+                .main-timeline .timeline:nth-child(2n) .timeline-content {
+                    padding: 10px 30px 10px 0
+                }
+            }
+
+            @media only screen and (max-width: 767px) {
+                .main-timeline:before {
+                    margin: 0;
+                    left: 7px
+                }
+                .main-timeline .timeline {
+                    margin-bottom: 20px
+                }
+                .main-timeline .timeline:last-child {
+                    margin-bottom: 0
+                }
+                .main-timeline .icon {
+                    margin: auto 0
+                }
+                .main-timeline .date-content {
+                    width: 95%;
+                    float: right;
+                    margin-top: 0
+                }
+                .main-timeline .date-content:before {
+                    display: none
+                }
+                .main-timeline .date-outer {
+                    width: 110px;
+                    height: 110px
+                }
+                .main-timeline .date-outer:before,
+                .main-timeline .date-outer:after {
+                    width: 110px;
+                    height: 110px
+                }
+                .main-timeline .date {
+                    top: 30%
+                }
+                .main-timeline .year {
+                    font-size: 24px
+                }
+                .main-timeline .timeline-content,
+                .main-timeline .timeline:nth-child(2n) .timeline-content {
+                    width: 95%;
+                    text-align: center;
+                    padding: 10px 0
+                }
+                .main-timeline .title {
+                    margin-bottom: 10px
+                }
+            }
+        </style>
+    </head>
+    <body id="page-top">
+        
+        <!-- Navigation-->
+        <script src="js/nav_bar.js"></script>
+        
+        <!-- Masthead-->
+        <header class="masthead" style="background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.7) 75%, #000000 100%), url(assets/img/oceanwatergray.jpg);">
+            <div class="container d-flex h-100 align-items-center">
+                <div class="mx-auto text-center">
+                    <h1 class="mx-auto my-0 text-uppercase">Resume</h1><br><br><br><br>
+                    <a class="btn btn-primary js-scroll-trigger" href="assets/files/Mix,%20Callan-Resume.pdf" download>Download Resume</a>
+                </div>
+            </div>
+        </header><br><br>
+        
+        <div class="container">
+            <div class="main-timeline">
+                    <!-- start experience section-->
+                    <div class="timeline">
+                        <div class="icon"></div>
+                        <div class="date-content">
+                            <div class="date-outer">
+                                <span class="date">
+                                    <span class="year">2020</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="timeline-content">
+                            <h5 class="title">Data Analyst</h5>
+                            <ul>
+                                <li><p class="description">Interacted with multiple departments to summarize and present information to key decision makers at BYU-Idaho</p></li>
+                                <li><p class="description">Identified key factors in student persistence using logistic regression and machine learning models</p></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- end experience section-->
+
+                    <!-- start experience section-->
+                    <div class="timeline">
+                        <div class="icon"></div>
+                        <div class="date-content">
+                            <div class="date-outer">
+                                <span class="date">
+                                    <span class="year">2020</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="timeline-content">
+                            <h5 class="title">Customer Experience Analyst (Internship)</h5>
+                            <ul>
+                                <li><p class="description"></p>Contracted with multiple companies to administer and evaluate consumer experience surveys to answer specific company questions</li>
+                                <li><p class="description">Pulled key insights from 100's of pages of survey data to present consumer wants and needs, touchpoints journey maps, and personas</p></li>
+                                <li><p class="description">Designed and implemented a dynamic Power BI Dashboard template reducing Dashboard building time from 100+ hours to less than 10</p></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- end experience section-->
+
+                    <!-- start experience section-->
+                    <div class="timeline">
+                        <div class="icon"></div>
+                        <div class="date-content">
+                            <div class="date-outer">
+                                <span class="date">
+                                    <span class="year">2020</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="timeline-content">
+                            <h5 class="title">Data Analyst (Internship)</h5>
+                            <ul>
+                                <li><p class="description">Developed VBA scripts to transform and save pulled data cutting previous time spent manually organizing data by over 90%</p></li>
+                                <li><p class="description">Preformed regression analysis on more than hundred thousand entries of DMV records to predict wait times for customers</p></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- end experience section-->
+
+                    <!-- start experience section-->
+                    <div class="timeline">
+                        <div class="icon"></div>
+                        <div class="date-content">
+                            <div class="date-outer">
+                                <span class="date">
+                                    <span class="year">2019</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="timeline-content">
+                            <h5 class="title">Teachers Assistant</h5>
+                            <ul>
+                                <li><p class="description">Managed grading of hundreds of students over two semesters by reviewing submitted work and responding to student's concerns</p></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- end experience section-->
+                    
+                    <!-- start experience section-->
+                    <div class="timeline">
+                        <div class="icon"></div>
+                        <div class="date-content">
+                            <div class="date-outer">
+                                <span class="date">
+                                    <span class="year">2019</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="timeline-content">
+                            <h5 class="title">Research Coordinator</h5>
+                            <ul>
+                                <li><p class="description">Collaborated with team to conduct market research in the South-eastern Idaho region in order to determine viability of a new start up in client's industrys</p></li>
+                                <li><p class="description">Created a project plan containing projected startup costs, barriers to entry, concerns with market, and step by step plan to proceed </p></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- end experience section-->
+                </div>
+            </div>
+        
+        <script src="js/footer.js"></script>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+        <!-- Third party plugin JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+    </body>
+</html>
