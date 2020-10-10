@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>What are Generative Adversarial Networks (GANs)?</title>
+        <link rel="icon" type="image/x-icon" href="../assets/img/favicon.ico" />
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="../css/styles.css" rel="stylesheet" />
+        
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.1/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.1/styles/dracula.min.css" />
+            
+        <style>
+            .img-responsive {
+                width: auto;
+                height: 300px;
+            }
+        </style>
+    </head>
+    <body id="page-top">
+        
+        <!-- Navigation-->
+        <script src="../js/nav_bar.js"></script>
+        
+        <div class="container-fluid bg-dark" style="height: 75px"></div><br><br>
+
+        <div class="container">
+            <div class="row">
+                <div class="col mx-auto text-center">
+                    <h1 class="text-uppercase">Generative Adversarial Networks (GANs)</h1>
+                    <h2 class="text-uppercase">What are they and how do they work?</h2><br><br><br>
+                </div>
+            </div>
+        </div>
+        <hr>
+        
+        <div class="container">
+                
+            <div class="container" id="code_div">
+                <h2>So How Can I Build My Own?</h2>
+                
+                <p>
+                    
+                </p>
+                
+                <div class="row">
+                    <div class="col-md">
+                        <h5 class="text-center">Discriminator</h5>
+                        <pre>
+                            <code class="python">
+def Discriminator():
+  model = tf.keras.Sequential(name='disciminator')
+  model.add(layers.Dense(25, activation='relu', input_shape=(2, )))
+  model.add(layers.Dense(25, activation='relu'))
+  model.add(layers.Dense(2))
+  model.add(layers.Dense(1))
+  return model
+                            </code>
+                        </pre>
+                        <!-- Insert Summery of Model -->
+                        <img src="" class="img-fluid rounded-corners">
+                    </div>
+                    <div class="col-md">
+                        <h5 class="text-center">Generator</h5>
+                        <pre>
+                            <code class="python">
+def Generator():
+  model = tf.keras.Sequential(name='generator')
+  model.add(layers.Dense(16, activation='relu', input_shape=(latent_dim, )))
+  model.add(layers.Dense(16, activation='relu'))
+  model.add(layers.Dense(2))
+  return model
+  
+                            </code>
+                        </pre>
+                        <!-- Insert Summery of Model -->
+                        <img src="" class="img-fluid rounded-corners">
+                    </div>                
+                </div>
+                
+                <pre>
+                    <code class="python"># tf.function enables faster run times
+@tf.function
+def train_step(real_data):
+
+  """
+  real_data: a tf.dataset that has already been batched
+  
+  The train step starts by taking a getting a batch of random latent point to be fed into the generator.
+  We then train the generator and discriminator. The real and fake batches are trained seperately
+  The two outputs are fed into our loss functions to get a value for both networks
+  
+  tf.GradientTape keeps track of the forward pass in each network. We find the gradients and the make our 
+  backward pass through each network hopefully minimizing the loss on the next pass through
+  """
+  
+  random_sample_points = tf.random.normal((batch_size, latent_dim))
+
+  with tf.GradientTape() as gen_tape, tf.GradientTape() as disc_tape:
+    generated_data = generator(random_sample_points, training=True)
+
+    real_output = discriminator(real_data, training=True)
+    fake_output = discriminator(generated_data, training=True)
+
+    gen_loss = generator_loss(fake_output)
+    disc_loss = discriminator_loss(real_output, fake_output)
+    
+  # Backward pass through each network
+  gradients_of_generator = gen_tape.gradient(gen_loss, generator.trainable_variables)
+  gradients_of_discriminator = disc_tape.gradient(disc_loss, discriminator.trainable_variables)
+
+  generator_optimizer.apply_gradients(zip(gradients_of_generator, generator.trainable_variables))
+  discriminator_optimizer.apply_gradients(zip(gradients_of_discriminator, discriminator.trainable_variables))
+
+  return gen_loss, disc_loss
+                    </code>
+                </pre>
+                
+                <pre>
+                    <code class="python">
+def train(epochs = 20):
+  gen_loss_list, disc_loss_list = [], []
+  seed_points = tf.random.normal((batch_size, latent_dim))
+
+  for epoch in range(epochs+1):
+    for _, batch in enumerate(data):
+      gen_loss, disc_loss = train_step(batch)
+    gen_loss_list.append(gen_loss), disc_loss_list.append(disc_loss)
+
+    generated_data_points = generator(seed_points, training = False)
+
+    if epoch % 100 == 0:
+      print("{}/{} gen loss: {} - disc loss {}".format(epoch, epochs, gen_loss, disc_loss))
+                    </code>
+                </pre>
+            </div>
+            
+            <hr>
+            <div class="container" id="references">
+                <h5>References:</h5>
+                <ol>
+                    <li>
+                        <a href="https://blog.paperspace.com/implementing-gans-in-tensorflow/" target="_blank">Building a 2d Gan</a> 
+                    </li>
+                </ol>
+            </div>
+            
+        </div>
+        
+        <script src="../js/footer.js"></script>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+        <!-- Third party plugin JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="../js/scripts.js"></script>
+    </body>
+</html>

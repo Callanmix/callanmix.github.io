@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>What are Generative Adversarial Networks (GANs)?</title>
+        <link rel="icon" type="image/x-icon" href="../assets/img/favicon.ico" />
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="../css/styles.css" rel="stylesheet" />
+        
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.1/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.1/styles/dracula.min.css" />
+            
+        <style>
+            .img-responsive {
+                width: auto;
+                height: 300px;
+            }
+        </style>
+    </head>
+    <body id="page-top">
+        
+        <!-- Navigation-->
+        <script id="blog_nav_script" src="../js/nav_bar.js" data-is_blog="true"></script>
+        
+        <div class="container-fluid bg-dark" style="height: 75px"></div><br><br>
+
+        <div class="container">
+            <div class="row">
+                <div class="col mx-auto text-center">
+                    <h1 class="text-uppercase">Generative Adversarial Networks (GANs)</h1>
+                    <h2 class="text-uppercase">What are they and how do they work?</h2>
+                    <h6>Posted on October 10, 2020</h6>
+                    <br><br>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="container">
+            <div class='row text-center'>
+                <div class="col-md-4">
+                    <img src="../assets/img/do_not_exist_1.JPG", class="img-fluid img-responsive rounded">
+                </div>
+                <div class="col-md-4">
+                    <img src="../assets/img/do_not_exist_2.JPG", class="img-fluid img-responsive rounded">
+                </div>
+                <div class="col-md-4">
+                    <img src="../assets/img/do_not_exist_3.JPG", class="img-fluid img-responsive rounded">
+                </div>
+            </div>
+        </div>
+        <div class="container text-center">
+            <small style="font-size: 10px">
+                These photos were collected 10/08/2020 from <a href='https://thispersondoesnotexist.com/' target="_blank">thispersondoesnotexist.com</a>
+            </small>
+        </div>
+        <hr>
+        <br>
+
+        <div class="container">
+            <h2 class="text-center">
+                These are not real people.
+            </h2><br><br>
+            
+            <h3>Introduction</h3>
+            <p>
+                These pictures were made by a <a href="https://github.com/NVlabs/stylegan2" target="_blank">complex model</a> that has learned to simulate what makes up a human face. The model was given many thousands of images and discovered that it needed to put eyes, a nose, a mouth, and all the other facial features in the right general area in order to generate a realistic looking image. These types of models are called Generative Adversarial Networks (GANs). 
+            </p>
+            <p>
+                GANs were first dreamt of by Ian Goodfellow, a deep learning researcher, in 2014. The dream came to him as he was at a local bar celebrating a fellow student's graduation. As doctrate level researchers tend to do, they were discussing the possibility of a new project: computers generating images. Inspiration struck as Goodfellow imagined the possibility of an adversarial process where two neural networks competed against each other to create better and better generated images.<sup><a href="#references">[1]</a></sup>   
+            </p>        
+            <p>
+                This is a suprisingly simple answer to an incredible complex task. For a while, computers (specifically neural networks and other machine learning algorithms) have been able to identify and classify images. This is all well and good, but like humans, just because they know what something is or what it looks like, does not mean that it can recreate that thing or even more, create something similar but different. Goodfellow discovered how to help computers create new things. Let's get into generative adversarial networks to understand how and why they work so well. If you want to see the code and GAN implemptation, click <a href="#code_div">here</a>.
+            </p>
+            <h3>What is a Nueral Network?</h3>
+            <br>
+            <div class="container text-center">
+                <img src="../assets/img/Neural%20Network%20Diagram.jpg" class="img-fluid rounded-corners" style="height: 60%; width: 60%">
+            </div><br>
+            <p>
+                This section describes a basic nueral network and how it functions. If you already grasp the concept, please feel free to skip to the next section.  
+            </p>
+            <p>
+                Neural networks are layers of math functions. At its most basic level, nueral networks consist of an input layer, one or more hidden layers, and an output layer. In each layer there are "nodes", which are connecting points. Every node in one layer is connected to every node in another layer by weights. These weights are just random numbers at first.
+            </p>
+            <p>
+                Now that some simple vocab is defined, the process is simple. A list of numbers is put into the input layer. These numbers go through each layer of the network and along every weight until the combine again at the output layer. That list of numbers is multiplied by every weight in the first layer. Each node in the next layer adds all of those up and becomes the input for the next layer. This continues till it reaches the output. 
+            </p>
+            <p>
+                The network has a goal, and is given a math function to know how far it is from achieving that goal (typically called a loss function). Every time that list of numbers goes through the network, it computes how badly it is doing. The network then adjusts every weight (random numbers or lines in the picture above) to lower the error and become better at achieving its goal. This process repeats thousands of times until the nueral network learns the right combination of weights to reach its goal.
+            </p>
+            <p>
+                Now this is an oversimplification of a neural network, but if you can understand this much, you can grasp the remaining content of this article. I highly recommend the video series by 3Blue1Brown- <a href="https://www.youtube.com/watch?v=aircAruvnKk&vl=en" target="_blank">But what is a Neural Network?</a>. It goes into depth on the math behind what make a nueral network function and how it tackles more difficult tasks. Now you are ready to understand GANs.
+            </p>
+            <h3>Structure of a GAN</h3>
+            <br>
+            <p>
+                In a simple GAN there are just two neural networks commonly known as a generator and a discriminator. As the the names imply, the former creates/generates data, and the latter determines if the generator's output can be classified as real or fake. The networks have oppisite goals. The discriminator wants to have as little error as possible in identifying real vs. fake. The generator, however, wants to have as much error as possible, having the discrimintor classify all its creations as real. The game stops when the discriminator outputs a 50/50 probability meaning that it is just guessing and can no longer determine the differences between real and fake. 
+            </p>
+            <p>
+                While very commonly used, the analogy of the detective and the art forger instrates the point well. Imagine a brand new forger makes an attempt to recreate a Van Gogh. She throws some paint on a canvas and tries the sell it. This gets inspected by a brand new detective that know little of art. This painting may get past the detective at first, but then he learns what makes a Van Gogh different than the forger's conterfit. The forger now has to also learn to create new works that are closer the a true Van Gogh. This cycle continues until the forger is so good that the detective can not tell any difference between original and counterfit.
+            </p>
+            <div class="container text-center">
+                <h5>Progression of a Generator</h5>
+                <img src="../assets/img/GAN%20Progression.jpg" class="img-fluid rounded-corners" style="height: 50%; width: 50%">
+            </div><br>
+            
+            <p>
+                To go into more detail, look at the following diagram. This describes the flow of creating an adversarial networks. We start off by inputing what is called a random latent space. This is a fancy name for a list of random numbers (usually 100). This number are fed through the generator which ouputs something that is in the same space as the real data. For example, if you were trying to create a GAN that made faces, your inputs would be images. Images are nothing more than pixel values. If the image is colored, each pixel has a red, green, and blue number. So for an 100x100 pixel image you could make a list of 100x100x3 pixels or 30,000 numbers. So the generator would output a list of 30,000 numbers to match.
+            </p>
+            <div class="container text-center">
+                <img src="../assets/img/GAN%20Flowchart.jpg" class="img-fluid rounded-corners" style="height: 75%; width: 75%">
+            </div><br>
+            <p>
+                That generated image would then be given to the discriminator. It would give a prediction of how confident it is that this generated image is a real picture. It would then do the same with a real image. Those confidence values would be given to a loss function (the value of how bad the neural network is preforming). The loss function (there is one for both networks) looks at how the discriminator and the generator worked. Each one then updates all of the weights in the corisponding network to lower the overall score. The process is then repeated with a new batch of random number and more real data comparisons.
+            </p>
+            
+            <h5>Behind the Scenes Content</h5>
+            <p>
+                This section can be skipped if you do not care about the ideas behind what a GAN is doing. These ideas again are simplified for ease of understanding. You might be saying right about now, "I understand the steps a GAN goes through, but what is it actually learning? How does it create varied content?" That is a great question. <strong>A generative adversarial network is learning the distribution of the real data</strong>. This concept was a breakthrough for me when I understood it. All data has a distribution. If we know that distribution, we can create a point that lies within that range.   
+            </p>            
+            <p>
+                Take the graphing plane for example. If we know roughly the bounds that all the other points lie, we can generate points that fall into that distribution. If we took away the coloring, it would be almost impossible to differientate between the original and generated points. This is simple in theory, but gets hard to comprehend once we start adding dimentions. Add one more axis add we move into a 3D space. Again we can visualize that, but add one more and we just can not comprend. A GAN attempts to find that multi-dimintional space.
+            </p>
+            
+            <div class="container text-center">
+                <img src="../assets/img/Adding%20Dimintions.jpg" class="img-fluid rounded-corners" style="height: 100%; width: 100%">
+            </div><br>
+            <p>
+                At first a GANs distribution may be far away from the actual. As it learns, it we get closer and closer to matching the actual distribution of the data. That's it! There is some debate as to if a GAN is learning a distribution or is just really good at copying.<sup><a href="#references">[2]</a></sup> For the purposes of this article, if you can grasp this concept, and all previous ones, you now understand the basics of a GAN.
+            </p>
+            <div class="container text-center">
+                <img src="../assets/img/GAN%20Distribution%20GIF.gif" class="img-fluid rounded-corners" style="height: 50%; width: 50%">
+            </div><br>
+            
+            <h3>Conclusion</h3>
+            <p>
+                We have gone through a brief history of a GANs, what neural networks are, how the relate to GANs, and what a GAN actually does. I hope that this has helped you understand what a GAN is. GANs are doing incredible things and making advancements in many areas including film-making, finance, design, and marketing. They can generate new faces as we have seen, take low resolution photos and make them super high resolution, colorize film, and even take a discription of a photo and produce an actual photo.<sup><a href="#references">[3]</a></sup>
+            </p>
+            <p>
+                Generative Adversarial Networks are an impressive innovation. New ideas and applications are dreamt up often, and the possiblities are vast. How will you and your industry take advantage of this amazing technology?
+            </p>            
+        </div>
+        
+        <script src="../js/footer.js"></script>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+        <!-- Third party plugin JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="../js/scripts.js"></script>
+    </body>
+</html>
