@@ -111,10 +111,10 @@
             <div class="container">
                 <h2>Introduction</h2>
                 <p>
-                    Can a computer generate new content? Something that is novel and original? I am not sure there is an answer, but we do have a way to imitate creation. Generative adversarial networks work in a similar way to humans. They take exsiting knowledge and produce new content within a given realm.  
+                    Can a computer generate new content? Something novel and original? I am not sure there is an answer, but we do have a way to imitate creation. Generative adversarial networks work similarly to humans. They take existing knowledge and produce new content within a given realm.  
                 </p>
                 <p>
-                    This post is to going cover basic theory of what generative adversarial networks do and how they work. We will also cover how to make your own simple GAN. By the end of this article, you will understand what a GAN strives to accomplish and how to implement it in your situations. Those who already have some understanding of neural networks and the basic structure of a GAN will benefit most from this reading. 
+                    This post is to going cover the basic theory of what generative adversarial networks do and how they work. We will also cover how to make your own simple GAN. By the end of this article, you will understand what a GAN strives to accomplish and how to implement it in your situations. Those who already have some understanding of neural networks and the basic structure of a GAN will benefit most from this reading. 
                 </p>
                 <p>
                     You can refresh your knowledge of those topics by reading my previous article <a href="What_Are_GANs.html">Generative Adversarial Networks (GANS)</a>. With that covered, let's get going!
@@ -124,10 +124,10 @@
                     GANs can do incredible things.<sup><a href="#references">[1]</a></sup> From creating realistic face images to generating images from text, there is no doubt that they are changing our world. However, those that overcome their novelty might ask themselves how GANs work, or more specifically, how do GANs know what to generate?
                 </p>
                 <p>
-                    They learn just like everyone! Imagine that you were a world-class artist (it can be hard for some to imagine that), but you had never seen the ocean. You have never even heard of the ocean and have no idea what it is. Now imagine that someone commisions you to paint them a beach scene. What is the first thing that you need to do? See the ocean. Once you see several different oceans and beach types, or maybe just even one, as an amazing artist, you could create a beach scene painting.
+                    They learn just like everyone! Imagine that you were a world-class artist (it can be hard for some to imagine that), but you had never seen the ocean. You have never even heard of the ocean and have no idea what it is. Now imagine that someone commissions you to paint them a beach scene. What is the first thing that you need to do? See the ocean. Once you see several different oceans and beach types, or maybe just even one, as an amazing artist, you could create a beach scene painting.
                 </p>
                 <p>
-                    Humans are amazing at expounding what we know to create things that fit within bounds. Whether it is beach scenes, cars, dogs, or stars, we can make something that has never been made in that exact way but is recognizable as that object. For the rest of the article, think of bounds as a distribution. People are fantastic at realizing what a distriubtion is and what does and does not belong to a certain distribution. We are going to expound on this idea with a simple example.
+                    Humans are amazing at expounding what we know to create things that fit within bounds. Whether it is beach scenes, cars, dogs, or stars, we can make something that has never been made in that exact way but is recognizable as that object. For the rest of the article, think of bounds as a distribution. People are fantastic at realizing what a distribution is and what does and does not belong to a certain distribution. We are going to expound on this idea with a simple example.
                 </p>
                 <h4>Game Time</h4>
                 <p>
@@ -203,7 +203,7 @@
                     How did you do? It might have been a silly game, but it demonstrates several key principles. <strong>In our game, you played the part of the discriminator and I played the role of the generator</strong>. I produced new points trying to match the given data and you sought to classify the generated point as fake! How did you know what points were real and which were fake? There are a few questions that you might have asked when trying to find the right point. Did it look right? How well does it match the other points? Is there even a generated point on the graph?
                 </p>
                 <p>
-                    Those are the same questions that, in essence, discriminator is asking. If you could not find the random point, that means that the generator was "working" or that it was producing points that were indistugishable from real. That brings us to the next key principle: <strong>the more variation there is in the data, the harder it is produce reliable results</strong>. There is more chance that a random guess can fall within the distribution, and therefore it is harder to test whether a GAN is functioning as expected. Big variations in data causes problems with most machine learning algorithms.
+                    Those are the same questions that, in essence, discriminator is asking. If you could not find the random point, that means that the generator was "working" or that it was producing points that were indistinguishable from real. That brings us to the next key principle: <strong>the more variation there is in the data, the harder it is to produce reliable results</strong>. There is more chance that a random guess can fall within the distribution, and therefore it is harder to test whether a GAN is functioning as expected. Big variations in data cause problems with most machine learning algorithms.
                 </p>
                 <p>
                     Lastly, our game roughly simulated how a GAN is trained. 
@@ -216,7 +216,7 @@
                     <li class="list-group-item">Repeat</li>
                 </ol><br>
                 <p>
-                    There is nothing new or exciting about these steps. This is the basic process we all go through when creating something new. Using these steps, we can train a Generative Network and get reliable output. The following section goes into coding a GAN in python using TensorFlow 2.0 framework. It is a mix of code and concept. If you are not interested in the code, you can skip to <a href="#loss_function_section">Loss Functions and Optimizer</a> for concept.
+                    There is nothing new or exciting about these steps. This is the basic process we all go through when creating something new. Using these steps, we can train a Generative Network and get reliable output. The following section goes into coding a GAN in python using TensorFlow 2.0 framework. It is a mix of code and concept. If you are not interested in the code, you can skip to <a href="#loss_function_section">Loss Functions and Optimizer</a> for the concept.
                 </p>
             </div>
             
@@ -224,7 +224,7 @@
             <div class="container-fluid">
                 <h2>So How Can I Build My Own?</h2>
                 <p>
-                    We will now get into how to implement your own GAN. The framework that is laid out is very scalable and interchangable with other GAN types. I have used similar code to produce new images with the <a href="https://www.tensorflow.org/datasets/catalog/fashion_mnist" target="_blank">Fashion MNIST dataset</a> and <a href="https://www.tensorflow.org/datasets/catalog/cifar10" target="_blank">CIFAR10 dataset</a>. The same steps have to be taken with each GAN.
+                    We will now get into how to implement your own GAN. The framework that is laid out is very scalable and interchangeable with other GAN types. I have used similar code to produce new images with the <a href="https://www.tensorflow.org/datasets/catalog/fashion_mnist" target="_blank">Fashion MNIST dataset</a> and <a href="https://www.tensorflow.org/datasets/catalog/cifar10" target="_blank">CIFAR10 dataset</a>. The same steps have to be taken with each GAN.
                 </p>
                 <p>
                     One note on training a GAN. It can quickly become a long process as your data and neural networks grow in size. I always use Google Colab<sup><a href="#references">[2]</a></sup> for my GAN projects. This is because I do not own a local machine with GPU capability. Google Colab offers free access to GPUs with a few restrictions. Training a GAN with GPU instead of CPU can decrease training times over 50x! For the 2D GANs created with the code in the article, it should not make a huge difference in time if you use a CPU.
@@ -237,10 +237,10 @@
                 </div><br><br>
                 <h4>Producing Data</h4>
                 <p>
-                    The first step is data preparation. The data needs to be in the correct format to use in our neural networks. One common ouput of this step is a TensorFlow dataset object. That can be made from a numpy array. A <code>tf.data.Dataset</code> randomizes the data and breaks it up into defines batches for use in our training. <code>tf.data.Dataset.from_tensor_slices(data,).shuffle(buffer_size=60000).batch(batch_size = 256)</code> is what I used to make the data variable in the train step section. 
+                    The first step is data preparation. The data needs to be in the correct format to use in our neural networks. One common output of this step is a TensorFlow dataset object. That can be made from a NumPy array. A <code>tf.data.Dataset</code> randomizes the data and breaks it up into defines batches for use in our training. <code>tf.data.Dataset.from_tensor_slices(data,).shuffle(buffer_size=60000).batch(batch_size = 256)</code> is what I used to make the data variable in the train step section. 
                 </p>
                 <p>
-                    As far as our data, we want to be able to make several different distributions to see the results. The following code is simplified to fit our needs. It will make for distributions: <code>["parabolic", "cubic", "circular", "linear"]</code>. The code accepts an input of x which is our x-axis number and returns y. We can change m, b, and the deviation from the equation. By running through a for loop, we can produces as many data points as we need.
+                    As far as our data, we want to be able to make several different distributions to see the results. The following code is simplified to fit our needs. It will make for distributions: <code>["parabolic", "cubic", "circular", "linear"]</code>. The code accepts an input of x which is our x-axis number and returns y. We can change m, b, and the deviation from the equation. By running through a for loop, we can produce as many data points as we need.
                 </p>
                 <div class="expandable-section">
                     <div class="mr-auto">
@@ -266,11 +266,11 @@ def get_y(x, type_ = "parabolic", m = 1, b = 0, sd = 0):
                 </div>
                 <h4>Generator and Discriminator</h4>
                 <p>
-                    We are using TensorFlow 2.0 sequential API syntax to make our neural networks. This is the simplist way to create a neural network, but does have the drawback of only being about to build on layer on top of the next. There are pros and cons to each way of structuring<sup><a href="#references">[3]</a></sup>. In this case, we want as simple as possible. These nueral networks are just my design. I encourage you to play around with the number of nodes and layers. 
+                    We are using TensorFlow 2.0 sequential API syntax to make our neural networks. This is the simplest way to create a neural network but does have the drawback of only being about to build on layer on top of the next. There are pros and cons to each way of structuring<sup><a href="#references">[3]</a></sup>. In this case, we want as simple as possible. These neural networks are just my design. I encourage you to play around with the number of nodes and layers. 
                 </p>
                 <h5>Discriminator</h5>
                 <p>
-                    Our discriminator will take an input of (x,y) or an array of two numbers. The output will be 1 number. Each layers is fully connected or dense. The output layer does not have an activation to keep the output restricted. I found this to help with training. If anyone knows why it works better, please reach out and let me know.
+                    Our discriminator will take an input of (x,y) or an array of two numbers. The output will be 1 number. Each layer is fully connected or dense. The output layer does not have an activation to keep the output restricted. I found this to help with training. If anyone knows why it works better, please reach out and let me know.
                 </p>
                 <div class="expandable-section">
                     <div class="mr-auto">
@@ -291,7 +291,7 @@ def Discriminator():
                 </div>
                 <h5>Generator</h5>
                 <p>
-                    Our generator will take an array of 10 random numbers as input. Those random numbers are called the latent space. We will convert that space, which can be classified as a distribution, to the distribution we are attempting to simulate. The output of the generator will be an (x,y) pair or 2 number array. The output does not have a activation because we want it to be linear, meaning any two number can be the output.
+                    Our generator will take an array of 10 random numbers as input. Those random numbers are called the latent space. We will convert that space, which can be classified as a distribution, to the distribution we are attempting to simulate. The output of the generator will be an (x,y) pair or 2 number array. The output does not have an activation function because we want it to be linear, meaning any two numbers can be the output.
                 </p>
                 <div class="expandable-section">
                     <div class="mr-auto">
@@ -442,7 +442,7 @@ def train(epochs = 1000):
                     
                 </p>
                 <p>
-                    Machine learning is leading to machine creation. The future is full of applications of computer generated content. From deepfakes to content creation, GANs are not going away. Knowing how they work and are made can demystify the magic and make us less aprehensive about allowing them in our lives.
+                    Machine learning is leading to machine creation. The future is full of applications of computer-generated content. From deepfakes to content creation, GANs are not going away. Knowing how they work and are made can demystify the magic and make us less apprehensive about allowing them in our lives.
                 </p>
                 <p>
                     The full code I used can be found on my Github under <a href="https://github.com/Callanmix/Working-With-GANs/blob/main/Simple_Gan.ipynb" target="_blank">Simple GANs</a>. Please feel free to reach out with any comments or suggestions. I am happy to learn and to help.
