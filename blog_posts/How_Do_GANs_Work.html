@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>How do Generative Adversarial Networks (GANs) Work?</title>
+        <link rel="icon" type="image/x-icon" href="../assets/img/favicon.ico" />
+        
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" crossorigin="anonymous"></script>
+        <script data-search-pseudo-elements src="https://use.fontawesome.com/releases/v5.13.0/js/all.js"></script>
+
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="../css/styles.css" rel="stylesheet" />
+        <!-- Include Plotly.js -->
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+            
+        <style>
+            .img-responsive {
+                width: auto;
+                height: 300px;
+            }
+            .list-group-item {
+                display: list-item;
+                list-style-position: inside
+            }
+        </style>
+        
+    </head>
+    <body id="page-top">
+        
+        <!-- Navigation-->
+        <script id="blog_nav_script" src="../js/nav_bar.js" data-is_blog="true"></script>
+        
+        <div class="container-fluid bg-dark" style="height: 75px"></div><br><br>
+
+        <div class="container">
+            <div class="row">
+                <div class="col mx-auto text-center">
+                    <h1 class="text-uppercase">What does a Generative adversarial network (GAN) do?</h1><br>
+                    <h3 class="text-uppercase">Play a game and see</h3>
+                    <h6>Posted on November 19, 2020</h6>
+                </div>
+            </div>
+        </div><br><br>
+        <div class="col text-center" id="main_image">
+            <img class="img-fluid rounded" src="https://cdn.pixabay.com/photo/2017/01/01/15/04/ocean-1944724_960_720.jpg">
+        </div>
+        <div class="text-center">
+            <small style="font-size: 10px">Image from Pixabay</small>
+        </div>
+        <hr>
+        
+        <div class="container">
+                
+            <div class="container">
+                <h2>Introduction</h2>
+                <p>
+                    Can a computer generate new content, something that is novel and original? One promising avenue of recent study and investment are generative adversarial networks. GANs are were thought up in 2014 and have since taken off into many fields such as marketing and film-making<sup><a href="#references">[1]</a></sup>.
+                </p>
+                <p>
+                    This post is to going cover the basic theory of what generative adversarial networks do and how they work. By the end of this article, you will understand what a GAN aims to accomplish. Those who already have some understanding of neural networks and the basic structure of a GAN will benefit most from this reading. 
+                </p>
+                <p>
+                    You can refresh your knowledge of those topics by reading my previous article <a href="What_Are_GANs.html">Generative Adversarial Networks (GANS)</a>. With that covered, let's get going!
+                </p><br>
+                <h2>What does a Generative Network do?</h2>
+                <p>
+                    GANs can do incredible things.<sup><a href="#references">[2]</a></sup> From creating realistic face images to generating images from text, there is no doubt that they are changing our world. Let's quickly cover the basic design of a GAN. At its fundamental level, a generative adversarial network is two competing neural networks trying to replicate some given data. The data can be images, videos, text, data sets, and even (x,y) points. The first neural network is called the generator. The generator creates new data that is trying to replicate the original data, also referred to as training data. For example, given a bunch of pictures of puppies, it tries to create an image that looks like a puppy. The second network is called the discriminator. It is tasked with classifying whether an input came from the training data or was produced by the generator.
+                </p>
+                <p>
+                    The generator and discriminator "battle", each trying to do its job better than the other. The discriminator, trying to classify all inputs correctly as from the original data or produced by the generator, and the generator, attempting to produce content that the discriminator will think is original. As one gets better, the other learns how to beat it. The outcome is the generator does so well that the discriminator can only make a 50/50 guess as to whether an input is original or generated.
+                </p>
+                <p>
+                     Some will learn about GANS and ask themselves how they work, or more specifically, how do GANs know what to generate? They learn just like everyone! Imagine that you were a world-class artist (it can be hard for some to imagine that), but you had never seen the ocean. You have never even heard of the ocean and have no idea what it is. Now imagine that someone commissions you to paint them a beach scene. What is the first thing that you need to do? See the ocean. Once you see several different oceans and beach types, or maybe just even one, as an amazing artist, you could create a beach scene painting.
+                </p>
+                <p>
+                    Humans are amazing at expanding what we know to create things that fit within bounds or categories. Whether it is beach scenes, cars, dogs, or stars, we can make something that has never been made but is recognizable as that object. To understand this better, picture a bad drawing of a car. How bad does that drawing have to be before you can not recognize it? There are certain things that you look for to know it is that thing. It is the same with an airplane or any number of other objects. We generally know something fits in a group and when it does not.
+                </p>
+                <div class="col text-center">
+                    <img class="img-fluid rounded" src="../assets/img/Bad%20Car%20Drawing.jpg">
+                    <small style="font-size: 10px">Made by Author</small>
+                </div><br>
+                <p>
+                    A GAN does something very similar. It attempts to understand what makes up the data it is given. For example, given a bunch of dog pictures, the GAN would determine what the pictures have in common. It would produce a "distribution" of what makes up a dog image and generate new dog images that fall in that discovered distribution. People do this too, just without realizing. We are going to expound on this idea with a simple example.
+                </p>
+                <h4>Game Time</h4>
+                <p>
+                    Let's play a game. There is one randomly generated point on the graph that I placed. The other points on the graph were created from a specific distribution. Your job is to recognize the real distribution and find the point that was randomly generated. How well can you find the random point? 
+                </p>
+            </div><br><br>
+            
+            <div class="container-fluid">
+                <div class="row text-center justify-content-around">
+                    <div class="col-md-8">    
+                        <h3><!-- Make a title --> </h3>
+                        <small>
+                            Guess by clicking on a point. The correct point will grow and turn blue. Click <strong>Next Chart</strong> to try again with a different data set. Change the difficulty by clicking <strong>Easy</strong>, <strong>Medium</strong>, and <strong>Hard</strong>.
+                        </small>
+                    </div>
+                </div>
+                <div class="row justify-content-around align-items-center">
+                    <div class="col-md-6">
+                        <div id='myDiv'><!-- Plotly chart will be drawn inside this DIV --></div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="row">
+                            <div class="col-md-6" id="computer_score" data-score=0>
+                                <h5>My Score</h5>
+                                <hr>
+                                <h2 id="computer_input">0</h2>
+                            </div>
+                            <div class="col-md-6" id="user_score" data-score=0>
+                                <h5>Your Score</h5>
+                                <hr>
+                                <h2 id="user_input">0</h2>
+                            </div>
+                        </div><hr><br>
+                        <div class="row text-center">
+                            <div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+                                <label class="btn btn-secondary active">
+                                    <input type="radio" name="options" autocomplete="off" checked 
+                                           onclick="$('#change_type').data('difficulty', 'easy'); draw_plot(plot_style = 'group', next=true);" > Easy
+                                </label>
+                                <label class="btn btn-secondary">
+                                    <input type="radio" name="options" autocomplete="off"
+                                           onclick="$('#change_type').data('difficulty', 'medium'); draw_plot(plot_style = 'group', next=true);" > Medium
+                                </label>
+                                <label class="btn btn-secondary">
+                                    <input type="radio" name="options" autocomplete="off" 
+                                           onclick="$('#change_type').data('difficulty', 'hard'); draw_plot(plot_style = 'group', next=true);"> Hard
+                                </label>
+                            </div>
+                        </div><br>
+                        <div class="row">
+                            <button id="change_type" class="btn btn-primary btn-block" data-stylechoice='circle', data-difficulty='easy'
+                                onclick="draw_plot(plot_style = 'group', next=true);">Next Chart</button>
+                        </div><br><br>
+                        <div class="row">
+                            <div class="alert alert-danger alert-dismissible fade" role="alert" id='wrong_alert'>
+                                <a href="" class="close" aria-label="close" onclick="$('#wrong_alert').removeClass('show'); return false;">&times;</a>
+                                <strong>Sorry</strong> That's not the right one.
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="alert alert-success alert-dismissible fade" role="alert" id='right_alert'>
+                                <a href="" class="close" aria-label="close" onclick="$('#right_alert').removeClass('show'); return false;">&times;</a>
+                                <strong>Great Job</strong> You found the right point.
+                            </div>
+                        </div>   
+                    </div>
+                </div>
+            </div>
+            <br><br><br>
+            <div class="container">
+                <h4>What did you learn?</h4>
+                <p>
+                    How did you do? It might have been a silly game, but it demonstrates several key principles. <strong>In our game, you played the part of the discriminator and I played the role of the generator</strong>. I produced a new point trying to match the given data and you sought to classify the generated point as not from the training data! How did you know what points were original and which were did not belong to distribution.? There are a few questions that you might have asked when trying to find the added point. Were there points anything different from all others? What is the general shape, or distribution, of the data? Did the randomly produced point match the original distribution?
+                </p>
+                <p>
+                    Those are the same questions that, in essence, the discriminator is asking. If you could not find the random point, that means that the generator was "working" or that it was producing points that were indistinguishable from real. That brings us to the next key principle: <strong>the more variation there is in the data, the harder it is to produce reliable results</strong>. There is more chance that a random guess can fall within the distribution, and therefore it is harder to test whether a GAN is functioning as expected. Big variations in data cause problems with most machine learning algorithms.
+                </p>
+                <p>
+                    <strong>Lastly, our game roughly simulated how a GAN is trained:</strong> 
+                </p>
+                <h5 class="text-center" id="basic_training_steps">Basic GAN Training Steps</h5>
+                <ol class="list-group list-group-flush">
+                    <li class="list-group-item">Generate data</li>
+                    <li class="list-group-item">See how that compares to real data</li>
+                    <li class="list-group-item">Adjust knowledge of what classifies real and fake points</li>
+                    <li class="list-group-item">Repeat</li>
+                </ol><br>
+                <p>
+                    It is such a powerfully simple process. It is similar to how someone would learn to paint, but can be applied more generally as well. If I wanted to learn to paint I might attempt to recreate an image. After I was done I would compare the two and figure out what I need to change to do better. Then I would try again and repeat the process. 
+                </p>
+            </div>
+            
+            
+            <div class="container">
+                <h2>Conclusion</h2>
+                <p>
+                    Let's circle back and answer the title question, what does a GAN do? It learns the distribution of data that it is given in training, and creates new instances that fall within that given distribution. That is why generative adversarial networks are so powerful, they can learn innumerable numbers and types of distributions.
+                </p>
+                <p>
+                    Machine learning is leading to machine creation. The future is full of applications of computer-generated content. From Deepfakes to content creation, GANs are not going away. Knowing how they work and are made can demystify the magic and make us less apprehensive about allowing them in our lives.
+                </p><br><br>
+                <p>
+                    Please feel free to reach out with any comments or suggestions about the article.
+                </p>
+            </div>
+
+            <br><br><br><br><hr>
+            <div class="container">
+                <div class="col" id="references">
+                    <h3><strong>References</strong></h3>
+                    <ol>
+                        <li><a href="https://www.allerin.com/blog/5-applications-of-generative-adversarial-networks" target="_blank">5 applications of generative adversarial networks</a></li>
+                        <li><a href="https://machinelearningmastery.com/impressive-applications-of-generative-adversarial-networks/" target="_blank">18 Impressive Applications of Generative Adversarial Networks (GANs)</a></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <script src="../js/footer.js"></script>
+        
+        <!-- End of Body Content -->
+        <script>
+            
+        function reset_gif(target_id) {
+            var src = $('#' + target_id).attr('src');
+            $('#' + target_id).attr('src', src);
+        }
+        function get_random_numbers(size, shape='parabola', add_dev=true, deviation=0) {
+            var x=[];
+            var y=[];
+            var extra_point_x = (Math.random() * (3 - -3 + 1) + -3).toPrecision(2);
+            var extra_point_y = (Math.random() * (3 - -3 + 1) + -3).toPrecision(2);
+            for(var i=0; i < size; i++) {
+                x.push((Math.random() * (2 - -2 + 1) + -2).toPrecision(2));
+            }
+            if (shape == 'parabola') {
+                for (var i=0; i < x.length; i++){
+                    y.push((x[i] ** 2 ));
+                }
+            } else if (shape == 'cubic') {
+                for (var i=0; i < x.length; i++){
+                    y.push((x[i] ** 3));
+                }
+            } else if (shape == 'group') {
+                for (var i=0; i < x.length; i++){
+                    y.push(((Math.random() * (2 - -2 + 1) + -2).toPrecision(2)));
+                }
+                return [x, y];
+            } else if (shape == 'circle') {
+                for (var i=0; i < x.length; i++){
+                    y.push((Math.sqrt(2**2 - x[i]**2) * (Math.round(Math.random()) * 2 - 1)));
+                }
+            }
+            if (add_dev){
+                for (var i=0; i < y.length; i++){
+                    y[i] = y[i] + parseFloat((Math.random() * (deviation - (-deviation)) + (-deviation)).toFixed(3));
+                }
+            }
+            x.push(extra_point_x);
+            y.push(extra_point_y);
+            return [x, y];
+        };
+        
+        function draw_plot(plot_style, next=false) {
+            if (next){
+                // Get deviation
+                var deviation = $("#change_type").data('difficulty');
+                if (deviation == 'hard'){
+                    deviation = 2;
+                } else if (deviation == 'medium') {
+                    deviation = 1;
+                } else {
+                    deviation = 0;
+                }
+                
+                var plot_style = $("#change_type").data('stylechoice');
+                var style_list = ['parabola', 'cubic', 'group', 'circle'];
+                var index = style_list.indexOf(plot_style);
+                if (index == style_list.length-1) {
+                    index=0;
+                } else {
+                    index += 1;
+                }
+                plot_style = style_list[index];
+                $("#change_type").data('stylechoice', style_list[index]);
+                $("#wrong_alert").removeClass('show');
+                $("#right_alert").removeClass('show');
+            }
+                    
+            var twoD_scatter = document.getElementById('myDiv'),
+                a = get_random_numbers(50, shape=plot_style, add_dev=true, deviation=deviation),
+                x = a[0],
+                y = a[1],
+                colors = Array(51).fill('rgb(102,0,0)');
+
+                var data = [{
+                    x: x,
+                    y: y,
+                    mode: 'markers',
+                    name: 'points',
+                    marker: {
+                        color: colors,
+                        size: 12,
+                        opacity: 0.8
+                    },
+                        type: 'scatter'
+                    }];
+                var layout = {
+                    showlegend: false,
+                    autosize: false,
+                    width: 600,
+                    height: 550,
+                    margin: {t: 50},
+                    hovermode: 'closest',
+                    bargap: 0,
+                    xaxis: {
+                        range: [-5, 5],
+                        showticklabels: false,
+                        domain: [0, 0.85],
+                        showgrid: false
+                    },
+                    yaxis: {
+                        range: [-5, 5],
+                        showticklabels: false,
+                        domain: [0, 0.85],
+                        showgrid: false
+                    }
+                };
+            
+            Plotly.newPlot(twoD_scatter, data, layout, {displayModeBar: false});
+
+            twoD_scatter.on('plotly_click', function(data){
+                if (twoD_scatter.data.length < 2){
+                    twoD_scatter.data.push({
+                        x: [twoD_scatter.data[0].x[twoD_scatter.data[0].x.length-1]],
+                        y: [twoD_scatter.data[0].y[twoD_scatter.data[0].y.length-1]],
+                        mode: 'markers',
+                        type: 'scatter',
+                        marker: {
+                            color: 'rgb(17, 157, 255)',
+                            size: 30
+                        } 
+                    })
+                    Plotly.redraw(twoD_scatter);
+                    if (data.points[0].pointNumber == data.points[0].data.x.length - 1) {
+                        var score = parseInt($("#user_score").data('score')) + 1;
+                        $("#user_score").data('score', String(score));
+                        document.getElementById('user_input').innerHTML = score;
+
+                        $("#right_alert").addClass('show');
+                        $("#wrong_alert").removeClass('show');
+                    } else {
+                        var score = parseInt($("#computer_score").data('score')) + 1;
+                        $("#computer_score").data('score', String(score));
+                        document.getElementById('computer_input').innerHTML = score;
+                        $("#wrong_alert").addClass('show');
+                        $("#right_alert").removeClass('show');
+                    }
+                }
+                
+            })
+        };
+        
+        draw_plot(plot_style = 'circle');
+
+
+    </script>
+        
+        <!-- Bootstrap core JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+        <!-- Third party plugin JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="../js/scripts.js"></script>
+    </body>
+</html>
