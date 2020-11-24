@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Creating a Simple GAN</title>
+        <link rel="icon" type="image/x-icon" href="../assets/img/favicon.ico" />
+        
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" crossorigin="anonymous"></script>
+        <script data-search-pseudo-elements src="https://use.fontawesome.com/releases/v5.13.0/js/all.js"></script>
+
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="../css/styles.css" rel="stylesheet" />
+        <!-- Include Plotly.js -->
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        
+        <!-- Include Highlighting of Code Blocks -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.1/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.1/styles/dracula.min.css" />
+            
+        <style>
+            .img-responsive {
+                width: auto;
+                height: 300px;
+            }
+            .list-group-item {
+                display: list-item;
+                list-style-position: inside
+            }
+            .btn-sm {
+                height: 15px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: space-around;
+            }
+            .expandable-section {
+                margin-bottom: 50px;
+            }
+            .code-section-links {
+              scroll-margin-top: 100px;
+            }
+            .btn-sm::after{
+                display: inline-block;
+                font-style: normal;
+                font-variant: normal;
+                text-rendering: auto;
+                -webkit-font-smoothing: antialiased;
+                display: none;
+            }
+            a[aria-expanded="false"].btn-sm::after{
+                font-family: "Font Awesome 5 Free";
+                font-weight: 900;
+                content: "\f101";
+            }
+            a[aria-expanded="true"].btn-sm::after{
+                font-family: "Font Awesome 5 Free";
+                font-weight: 900;
+                content: "\f100";
+            }
+            @media (min-width: 736px){
+                a[aria-expanded="true"] {
+                    width: 100%;
+                    transition: all 1s;
+                }
+                a[aria-expanded="false"] {
+                    width: 33%;
+                    transition: all 1s;
+                }
+            }
+            .python {
+                border-radius: 25px;
+                border: 2px solid darkgray;
+                padding: 20px; 
+            }
+        </style>
+        
+    </head>
+    <body id="page-top">
+        
+        <!-- Navigation-->
+        <script id="blog_nav_script" src="../js/nav_bar.js" data-is_blog="true"></script>
+        
+        <div class="container-fluid bg-dark" style="height: 75px"></div><br><br>
+
+        <div class="container">
+            <div class="row">
+                <div class="col mx-auto text-center">
+                    <h1 class="text-uppercase">How to make a 2d GAN?</h1>
+                    <h3 class="text-uppercase"></h3>
+                    <h6>Posted on November 13, 2020</h6>
+                </div>
+            </div>
+        </div><br><br>
+        <div class="col text-center" id="main_image">
+        </div>
+        <div class="text-center">
+            <small style="font-size: 10px">Image from Pixabay</small>
+        </div>
+        <hr>
+        
+        <div class="container">
+            <div class="container">
+                <h2>Introduction</h2>
+                <p>
+                    This article is intended for those that want to create their own generative adversarial networks. It assumes knowledge of basic nueral network structure and function (i.e. layers and weights, training process) and what generative adverserial networks are. You can learn or refresh those concepts by reading my previous posts on the subject. The goal of this post is to provide the understanding and framework to create your own GAN and implement it with your own data. There are four general sections that will break down the GAN creation process.
+                </p>
+                <ol class="list-group list-group-flush">
+                    <a href="#data_prep_section"><li class="list-group-item">Producing the Training Data</li></a>
+                    <a href="#networks_section"><li class="list-group-item">Defining Both Nueral Networks</li></a>
+                    <a href="#loss_function_section"><li class="list-group-item">Creating Loss Functions and Optimizers</li></a>
+                    <a href="#training_section"><li class="list-group-item">Defining Training Step</li></a>
+                </ol><br>
+            </div>
+            
+            <div class="container-fluid">
+                <h2>So How Can I Build My Own?</h2>
+                <p>
+                    We will now get into how to implement your own GAN. The framework that is laid out is very scalable and interchangeable with other GAN types. I have used similar code to produce new images with the <a href="https://www.tensorflow.org/datasets/catalog/fashion_mnist" target="_blank">Fashion MNIST dataset</a> and <a href="https://www.tensorflow.org/datasets/catalog/cifar10" target="_blank">CIFAR10 dataset</a>. The same steps have to be taken with each GAN.
+                </p>
+                <p>
+                    One note on training a GAN. It can quickly become a long process as your data and neural networks grow in size. I always use Google Colab<sup><a href="#references">[2]</a></sup> for my GAN projects. This is because I do not own a local machine with GPU capability. Google Colab offers free access to GPUs with a few restrictions. Training a GAN with GPU instead of CPU can decrease training times over 50x! For the 2D GANs created with the code in the article, it should not make a huge difference in time if you use a CPU.
+                </p>
+                <p>
+                    These code chunks are simplified pieces of the whole. If you want to see all of these pieces together in a working example, please <a href="https://github.com/Callanmix/Working-With-GANs/blob/main/Simple_Gan.ipynb" target="_blank">see the whole code</a>. Feel free to take whatever parts you would like to use.
+                </p>
+                <div class="col-md-4 mr-auto">
+                    <a href="" class="btn btn-sm btn-block" onclick="$('.code-section').collapse('toggle'); return false;">Click to Show All Code</a>
+                </div><br><br>
+                
+                <h2>Code Section</h2>
+                <h4 class="code-section-links" id="data_prep_section">Producing Data</h4>
+                <p>
+                    The first step is data preparation. The data needs to be in the correct format to use in our neural networks. One common output of this step is a TensorFlow dataset object. That can be made from a NumPy array. A <code>tf.data.Dataset</code> randomizes the data and breaks it up into defines batches for use in our training.
+                </p>
+                <p>
+                    As far as our data, we want to be able to make several different distributions to see the results. The following code is simplified to fit our needs. It will make for distributions: <code>["parabolic", "cubic", "circular", "linear"]</code>. The code accepts an input of x which is our x-axis number and returns y. We can change m, b, and the deviation from the equation. By running through a for loop, we can produce as many data points as we need.
+                </p>
+                <div class="expandable-section">
+                    <div class="mr-auto">
+                        <a class="btn btn-block btn-sm" data-toggle="collapse" href="#producing_data_code" role="button" aria-expanded="false" aria-controls="producing_data_code">Producing Data Code</a>
+                    </div>
+                    <div class="collapse code-section" id="producing_data_code">
+                        <pre>
+                            <code class="python">
+def get_y(x, type_ = "parabolic", m = 1, b = 0, sd = 0):
+    if type_.lower() == 'parabolic':
+      return ((m * x**2 + b) + np.random.normal(scale=sd)) 
+    elif type_.lower() == 'cubic':
+      return ((m * x**3 + b) + np.random.normal(scale=sd))
+    elif type_.lower() == 'circular':
+      return ((np.sqrt(4**2 - x**2)) + np.random.normal(scale=sd))
+    elif type_.lower() == 'linear':
+      return ((m * x + b) + np.random.normal(scale=sd))
+    else:
+      print('Please Choose from Following list of options: ["parabolic", "cubic", "circular", "linear"]')
+      
+ data = tf.data.Dataset.from_tensor_slices(data,).shuffle(buffer_size=60000).batch(batch_size = 256)
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+                <h4 class="code-section-links" id="networks_section">Generator and Discriminator</h4>
+                <p>
+                    We are using TensorFlow 2.0 sequential API syntax to make our neural networks. This is the simplest way to create a neural network but does have the drawback of only being about to build on layer on top of the next. There are pros and cons to each way of structuring<sup><a href="#references">[3]</a></sup>. In this case, we want as simple as possible. These neural networks are just my design. I encourage you to play around with the number of nodes and layers. 
+                </p>
+                <h5>Discriminator</h5>
+                <p>
+                    Our discriminator will take an input of (x,y) or an array of two numbers. The output will be 1 number. Each layer is fully connected or dense. The output layer does not have an activation to keep the output restricted. I found this to help with training. If anyone knows why it works better, please reach out and let me know.
+                </p>
+                <div class="expandable-section">
+                    <div class="mr-auto">
+                        <a class="btn btn-sm btn-block" data-toggle="collapse" href="#discriminator_code" role="button" aria-expanded="false" aria-controls="discriminator_code">Discriminator Code</a>
+                    </div>
+                    <div class="collapse code-section" id="discriminator_code">
+                        <pre>
+                            <code class="python">
+def Discriminator():
+  model = tf.keras.Sequential(name='disciminator')
+  model.add(layers.Dense(25, activation='relu', input_shape=(2, )))
+  model.add(layers.Dense(25, activation='relu'))
+  model.add(layers.Dense(1))
+  return model
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+                <h5>Generator</h5>
+                <p>
+                    Our generator will take an array of 10 random numbers as input. Those random numbers are called the latent space. We will convert that space, which can be classified as a distribution, to the distribution we are attempting to simulate. The output of the generator will be an (x,y) pair or 2 number array. The output does not have an activation function because we want it to be linear, meaning any two numbers can be the output.
+                </p>
+                <div class="expandable-section">
+                    <div class="mr-auto">
+                        <a class="btn btn-sm btn-block" data-toggle="collapse" href="#generator_code" role="button" aria-expanded="false" aria-controls="generator_code">Generator Code</a>
+                    </div>
+                    <div class="collapse code-section" id="generator_code">
+                        <pre>
+                            <code class="python">
+def Generator():
+  model = tf.keras.Sequential(name='generator')
+  model.add(layers.Dense(16, activation='relu', input_shape=(latent_dim, )))
+  model.add(layers.Dense(16, activation='relu'))
+  model.add(layers.Dense(2))
+  return model
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+                
+                <h4 class="code-section-links" id="loss_function_section">Loss Functions and Optimizer</h4>
+                <p>
+                    We need to define first our optimizers. An Adam Optimizer is typically used as it helps to deal with the problem of vanishing gradients. We make one for each network.
+                </p>
+                <p>
+                    Next, we have to define custom loss functions for each network. We use binary cross-entropy<sup><a href="#references">[4]</a></sup> because we have two outcomes; real and fake. We will give real data the label of 1 and fake data the label of 0. Let's break this down a little more. We need to understand the goals of each network to figure out how to judge if they are meeting that goal. 
+                </p>
+                <p>
+                    For the discriminator, it needs to tell the difference between real images and fake images. It gets a perfect score (which for cross-entropy is 0) when all fake data is predicted as 0's and all real data as 1's. It gets a worse score the more it misclassifies the data. In our loss function, we do measure how well it does. Since we train on real and fake data separately, we can give all the real data a label of 1 and all fake data we can compare to a label of 0. Using <code>tf.like_ones</code> and <code>tf.like_zeros</code> we create arrays of labels to compares. We then add those two scores up to get our total loss for the discriminator.
+                </p>
+                <p>
+                    Our generator has a different goal. It wants to get the discriminator to label all of its creations as real. How can we judge this? The brilliant answer is to flip the labels! We see how close the generator came to having all of its outputs classified as real by the discriminator. So we feed an array of 1's which is the real label. This tells us how close the generator came to being perfect in fooling the discriminator. 
+                </p>
+                <div class="expandable-section">
+                    <div class="mr-auto">
+                        <a class="btn btn-block btn-sm" data-toggle="collapse" href="#loss_function_code" role="button" aria-expanded="false" aria-controls="loss_function_code">Training Step Code</a>
+                    </div>
+                    <div class="collapse code-section" id="loss_function_code">
+                        <pre>
+                            <code class="python">
+generator_optimizer = tf.keras.optimizers.Adam(1e-4)
+discriminator_optimizer = tf.keras.optimizers.Adam(1e-4)
+
+cross_entropy = tf.keras.losses.BinaryCrossentropy(from_logits=True)
+
+def discriminator_loss(real_data, fake_data):
+  real_loss = cross_entropy(tf.ones_like(real_data, dtype='float32'), real_data)
+  fake_loss = cross_entropy(tf.zeros_like(fake_data, dtype='float32'), fake_data)
+  total_loss = real_loss + fake_loss
+  return total_loss
+
+def generator_loss(fake_data):
+  return cross_entropy(tf.ones_like(fake_data), fake_data)
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+                <h4 class="code-section-links" id="training_section">Training Step</h4>
+                <p>
+                    <!-- Need to rewrite -->
+                    In the training step, are going to go through the basic steps we defined <a href="#basic_training_steps">earlier</a>. First, we generate new data. We then train the discriminator on a batch of real data and then a batch of the generated data. Using those outputs, we can determine how well the discriminator is doing in distinguishing real from the fake and how well the generator is fooling the discriminator. Lastly, we take those losses and update our weights in the neural networks.
+                </p>
+                <p>
+                    A couple of cool features are going on in this code. First is <code>@tf.function</code>, which integrates our training step with TensorFlow's process. It speeds up our training time. Next is <code>tf.GradientTape()</code>. By running our networks in this loop, it collects the gradients of each network. We then can feed our losses and gradients to update the networks with the optimizers.
+                </p>
+                <div class="expandable-section">
+                    <div class="mr-auto">
+                        <a class="btn btn-sm btn-block" data-toggle="collapse" href="#train_step_code" role="button" aria-expanded="false" aria-controls="train_step_code">Training Step Code</a>
+                    </div>
+                    <div class="collapse code-section" id="train_step_code">
+                        <pre>
+                            <code class="python">
+@tf.function
+def train_step(real_data):
+  random_sample_points = tf.random.normal((batch_size, latent_dim))
+
+  with tf.GradientTape() as gen_tape, tf.GradientTape() as disc_tape:
+    generated_data = generator(random_sample_points, training=True)
+
+    real_output = discriminator(real_data, training=True)
+    fake_output = discriminator(generated_data, training=True)
+
+    gen_loss = generator_loss(fake_output)
+    disc_loss = discriminator_loss(real_output, fake_output)
+    
+  # Backward pass through each network
+  gradients_of_generator = gen_tape.gradient(gen_loss, generator.trainable_variables)
+  gradients_of_discriminator = disc_tape.gradient(disc_loss, discriminator.trainable_variables)
+
+  generator_optimizer.apply_gradients(zip(gradients_of_generator, generator.trainable_variables))
+  discriminator_optimizer.apply_gradients(zip(gradients_of_discriminator, discriminator.trainable_variables))
+
+  return gen_loss, disc_loss
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+                <p>
+                    This training step is put into a basic training loop. For each epoch, we will cycle through batches of our real data and feed them to the <code>train_step</code>. The variable <code>data</code> is a <code>tf.data.Dataset</code> object. It holds all the real data in batches that can be easily given to the discriminator in the <code>train_step()</code>. We can return the losses to visualize as training happens.
+                </p>
+                <div class="expandable-section">
+                    <div class="mr-auto">
+                        <a class="btn btn-block btn-sm" data-toggle="collapse" href="#train_code" role="button" aria-expanded="false" aria-controls="train_code">Training Step Code</a>
+                    </div>
+                    <div class="collapse code-section" id="train_code">
+                        <pre>
+                            <code class="python">
+def train(epochs = 1000):
+  gen_loss_list, disc_loss_list = [], []
+
+  for epoch in range(epochs):
+    for batch in data:
+      gen_loss, disc_loss = train_step(batch)
+      
+    gen_loss_list.append(gen_loss)
+    disc_loss_list.append(disc_loss)
+
+    if epoch % 100 == 0:
+      print("Epoch: {}/{} - Generator Loss: {} - Discriminator Loss {}".format(epoch, epochs, gen_loss, disc_loss))
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="container">
+                <h2>Conclusion</h2>
+                <p>
+                    We can put all of that together to create a GAN. With this foundation, we can train and see the results. Below are several examples of showing a GAN in training. We can see how the distribution of generated points changes to match the real points. We can also see how much faster convergence is with a linear data set which is very simple compared to our circular data set. Double click the tab to reset the gif. 
+                </p>
+                <div class="container">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a class="nav-link" role="tab" onclick="reset_gif('circle_gif')" data-toggle="tab" href="#circle">Circular Data</a></li>
+                        <li><a class="nav-link" role="tab" onclick="reset_gif('parabola_gif')" data-toggle="tab" href="#parabola">Parabolic Data</a></li>
+                        <li><a class="nav-link" role="tab" onclick="reset_gif('line_gif')" data-toggle="tab" href="#line">Linear Data</a></li>
+                    </ul>
+                    <div class="tab-content text-center">
+                        <div id="circle" class="tab-pane fade show active">
+                            <img class="img-fluid" id="circle_gif" src="../assets/gifs/circular.gif">
+                        </div>
+                        <div id="parabola" class="tab-pane fade">
+                            <img class="img-fluid" id="parabola_gif" src="../assets/gifs/parabolic.gif">
+                        </div>
+                        <div id="line" class="tab-pane fade">
+                            <img class="img-fluid" id="line_gif" src="../assets/gifs/linear.gif">
+                        </div>
+                    </div>
+                </div><br><br>
+                <p>
+                    
+                </p>
+                <p>
+   
+                </p>
+                <p>
+                    The full code I used can be found on my Github under <a href="https://github.com/Callanmix/Working-With-GANs/blob/main/Simple_Gan.ipynb" target="_blank">Simple GANs</a>. Please feel free to reach out with any comments or suggestions. I am happy to learn and to help.
+                </p>
+            </div>
+
+            <br><br><br><br><hr>
+            <div class="container">
+                <div class="col" id="references">
+                    <h3><strong>References</strong></h3>
+                    <ol>
+                        <li><a href="https://colab.research.google.com/notebooks/intro.ipynb" target="_blank">Introduction to Google Colab</a></li>
+                        <li><a href="https://medium.com/@hanify/sequential-api-vs-functional-api-model-in-keras-266823d7cd5e#:~:text=Sequential%20and%20Functional%20are%20two,can%20do%20that%20for%20us." target="_blank">Sequential API vs Functional API model in Keras</a></li>
+                        <li><a href="https://peltarion.com/knowledge-center/documentation/modeling-view/build-an-ai-model/loss-functions/binary-crossentropy" target="_blank">Binary crossentropy</a></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <script src="../js/footer.js"></script>
+        
+        <!-- End of Body Content -->
+        <script>
+        function reset_gif(target_id) {
+            var src = $('#' + target_id).attr('src');
+            $('#' + target_id).attr('src', src);
+        }
+        </script>
+        
+        <!-- Bootstrap core JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+        <!-- Third party plugin JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="../js/scripts.js"></script>
+    </body>
+</html>
